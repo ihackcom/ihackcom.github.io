@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+html,body {
+	margin :0;
+	padding:0;
+	overflow : hidden;
+}
+body {
+	width :100%;
+	height :100%;
+}
+.view {
+	position : absolute;
+	width : 300%;
+	background-image : url(img/sample.jpg);
+	background-repeat : no-repeat;
+	background-size : cover;
+	background-position : center bottom;
+}
+.left,.right {
+	position :absolute;
+	width : 50%;
+	height: 100%;
+	overflow:hidden;
+	top : 0%;
+}
+.left {
+	left : 0%;
+}
+.right {
+	left : 50%;
+}
+.plate {
+	position : fixed;
+	top : 0px;
+	left : 0px;
+}
+</style>
+<title>ihack.com</title>
+</head>
+<body>
+<div class="left">
+	<div class="view"></div>
+</div>
+<div class="right">
+	<div class="view"></div>
+</div>
+<div class="plate">
+	<div class="info1"></div>
+	<div class="info2"></div>
+	<div class="info3"></div>
+</div>
+<script>
+(function(){
+
+
+	// ジャイロセンサーを読み取り反映する
+	var info1 = document.querySelector(".info1");
+	var info2 = document.querySelector(".info2");
+	var info3 = document.querySelector(".info3");
+	window.addEventListener("devicemotion",function(event) {
+		// ユーザーによる加速度 + 重力
+		var x = event.accelerationIncludingGravity.x; // 左右
+		var y = event.accelerationIncludingGravity.y; // 上下
+		var z = event.accelerationIncludingGravity.z; // 前後
+		var html = 'ユーザー加速度＋重力：　<br>x=' + x + "<br> y=" + y + "<br> z=" + z;
+		info1.innerHTML = html;
+
+		// ユーザーによる加速度
+		var x = event.acceleration.x; // 左右
+		var y = event.acceleration.y; // 上下
+		var z = event.acceleration.z; // 前後
+		var html = 'ユーザー加速度：　<br>x=' + x + "<br> y=" + y + "<br> z=" + z;
+		info2.innerHTML = html;
+
+		// 前回呼び出しからの経過時間
+		var a = event.rotationRate.alpha;
+		var b = event.rotationRate.beta;
+		var g = event.rotationRate.gamma;
+		var html = 'ユーザー傾き：　<br>alpha(z):' + a + '<br> beta(x):' + b + '<br/>gamma(y):' + g;
+		info3.innerHTML =html;
+	});
+})();
+
+/*(function(){
+	var views = document.querySelectorAll(".view");
+
+	// ウィンドウ幅を変更する
+	var adjast = function (){
+		for( var i=0,length=views.length ; i<length ; i++ ) {
+			var view = views[i];
+			view.style.width = (window.innerWidth*3)+"px";
+			view.style.height = (window.innerHeight*3)+"px";
+			view.style.top = -(window.innerHeight)+"px";
+		}
+	}
+	adjast();
+	window.addEventListener("resize",adjast);
+
+	// ジャイロセンサーを読み取り反映する
+	var currentY = 0.0;
+	var currentZ = 100.0;
+	var targetZ = 100.0;
+	var currentB = 100.0;
+	var targetB = 100.0;
+	window.addEventListener("devicemotion",function(event) {
+		var targetY = event.accelerationIncludingGravity.y*9.0;
+		targetZ += event.rotationRate.alpha/4;
+		if( targetZ <-200.0 ) {
+			targetZ = -200.0
+		} else if ( 0.0 < targetZ ) {
+			targetZ = 0.0;
+		}
+		targetB -= event.rotationRate.beta/4;
+		if( targetB <-200.0 ) {
+			targetB = -200.0
+		} else if ( 0.0 < targetB ) {
+			targetB = 0.0;
+		}
+		currentB = ((targetB-currentB)/3.0)+currentB;
+		currentY = ((targetY-currentY)/3.0)+currentY;
+		currentZ = ((targetZ-currentZ)/3.0)+currentZ;
+		for( var i=0,length=views.length ; i<length ; i++ ) {
+			var view = views[i];
+			view.style.WebkitTransform ="rotate("+currentY+"deg)";
+			view.style.Transform ="rotate("+currentY+"deg)";
+			view.style.left = currentZ+"%";
+			view.style.top = currentB+"%";
+		}
+	});
+})(); */
+</script>
+</body>
+</html>

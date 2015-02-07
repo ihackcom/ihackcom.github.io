@@ -3,65 +3,122 @@
 <head>
 <meta charset="utf-8">
 <style>
-html,body {
-	margin :0;
-	padding:0;
+@font-face {
+	/* url("font/keion.woff") format("woff"),  */
+  font-family: 'keion';
+  src: url("font/shingeki.ttf") format("truetype"); }
+/* line 6, ../sass/index.scss */
+html {
+  font-family: 'keion', meiryo, sans-serif;
+  font-size: 100%;
+  margin : 0;
+  padding : 0;
+  height: 100%;
+  color :white;
+  overflow : hidden;
+  background-color : black;
 }
 body {
-	width :100%;
-	height :100%;
+	text-align : center;
+	font-size: 300%;
+	height: 100%;
+	text-shadow : 0px 0px 30px black,0px 0px 10px black;
 }
-.view {
-	width : 200%;
-	background-image : url(img/sample.jpg);
-	background-repeat : no-repeat;
+.bg1,.bg2,.bg3 {
+	position : absolute;
+	top : 0%;
+	left : 0%;
+	width : 100%;
+	height: 100%;
+	background-color : black;
+	background-image : url(wall.jpg);
 	background-size : cover;
 	background-position : center bottom;
+	background-repeat : no-repeat;
+}
+h1 {
+	position : absolute;
+	margin : 0;
+	padding: 0;
+	bottom : 30%;
+	width : 100%;
+	font-size : 200%;
+}
+.subtitle {
+	position : absolute;
+	bottom : 23%;
+	width : 100%;
+	font-size : 80%;
+}
+.broadcast,.receive {
+	position : absolute;
+	margin : 0 auto;
+	width : 20%;
+	bottom : 10%;
+	font-size : 50%;
+	padding : 1.0%;
+	background-color: rgba(30,30,30,0.8);
+	transition-duration: 0.5s;
+	cursor : pointer;
+	border : 1px solid lime;
+}
+.broadcast:hover,.receive:hover {
+	opacity : 0.5;
+}
+.broadcast{
+	left : 25%;
+}
+.receive {
+	left : 55%;
+}
+footer {
+	position : absolute;
+	bottom : 3%;
+	width : 100%;
+	font-size : 30%;
 }
 </style>
+<script>
+(function(){}).call(this),function(){var a,b;b=document.querySelector("html"),a=function(){var a,c;return c=parseInt(.15*window.innerWidth),a=parseInt(.15*window.innerHeight),b.style.fontSize=c>a?a+"%":c+"%"},window.addEventListener("resize",a),a()}.call(this);
+</script>
 <title>ihack.com</title>
 </head>
 <body>
-<div class="view">
-	<div class="info1"></div>
-	<div class="info2"></div>
-	<div class="info3"></div>
-</div>
-<script>
-(function(){
-
-	// ウィンドウ幅を変更する
-	var view = document.querySelector(".view");
-	var adjast = function (){
-		console.log(window.innerHeight);
-		view.style.height = (window.innerHeight*2)+"px";
-	}
-	adjast();
-	window.addEventListener("resize",adjast);
-
-	// ジャイロセンサーを読み取り反映する
-	var info1 = document.querySelector(".info1");
-	var info2 = document.querySelector(".info2");
-	var info3 = document.querySelector(".info3");
-	window.addEventListener("devicemotion",function(event) {
-		// ユーザーによる加速度 + 重力
-		var x = event.accelerationIncludingGravity.x; // 左右
-		var y = event.accelerationIncludingGravity.y; // 上下
-		var z = event.accelerationIncludingGravity.z; // 前後
-		var html = 'ユーザー加速度＋重力：　<br>x=' + x + "<br> y=" + y + "<br> z=" + z;
-		info1.innerHTML = html;
-
-		// ユーザーによる加速度
-		var x = event.acceleration.x; // 左右
-		var y = event.acceleration.y; // 上下
-		var z = event.acceleration.z; // 前後
-		var html = 'ユーザー加速度：　<br>x=' + x + "<br> y=" + y + "<br> z=" + z;
-		info2.innerHTML = html;
-
-		// 前回呼び出しからの経過時間
-		info3.innerHTML = '前回からの時間：　<br>' + event.interval;
+	<div class="bg1"></div>
+	<div class="bg2"></div>
+	<div class="bg3"></div>
+	<h1>ihack.com</h1>
+	<div class="subtitle">Hack his eyes.</div>
+	<div class="broadcast">配信する</div>
+	<div class="receive">受信する</div>
+	<footer>
+		Copyright ノメリ.com 2015 All Rights Reserved.
+	</footer>
+	<script>
+	document.querySelector(".broadcast").addEventListener("click",function(){
+		location.href="apps/index.html";
 	});
-})();
-</script>
+	document.querySelector(".receive").addEventListener("click",function(){
+		location.href="apps/index.html";
+	});
+	var bg2 = document.querySelector(".bg2");
+	var bg3 = document.querySelector(".bg3");
+	var cnt = 0;
+	var MAX_CNT = 300;
+	setInterval(function(){
+		cnt++;
+		var bg2Cnt = cnt%MAX_CNT;
+		var bg3Cnt = (cnt+MAX_CNT/2)%MAX_CNT;
+		if( bg2Cnt>bg3Cnt ) {
+			var tmp = bg2Cnt;
+			bg2Cnt = bg3Cnt;
+			bg3Cnt = tmp;
+		}
+		bg2.style.WebkitTransform = "scale("+(1.0+bg2Cnt*0.005)+")";
+		bg2.style.opacity = (MAX_CNT-bg2Cnt)/MAX_CNT;
+		bg3.style.WebkitTransform = "scale("+(1.0+bg3Cnt*0.005)+")";
+		bg3.style.opacity = (MAX_CNT-bg3Cnt)/MAX_CNT;
+	},1000/60);
+	</script>
 </body>
 </html>
