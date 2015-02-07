@@ -1,1 +1,67 @@
-hello
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<style>
+html,body {
+	margin :0;
+	padding:0;
+}
+body {
+	width :100%;
+	height :100%;
+}
+.view {
+	width : 200%;
+	background-image : url(img/sample.jpg);
+	background-repeat : no-repeat;
+	background-size : cover;
+	background-position : center bottom;
+}
+</style>
+<title>ihack.com</title>
+</head>
+<body>
+<div class="view">
+	<div class="info1"></div>
+	<div class="info2"></div>
+	<div class="info3"></div>
+</div>
+<script>
+(function(){
+
+	// ウィンドウ幅を変更する
+	var view = document.querySelector(".view");
+	var adjast = function (){
+		console.log(window.innerHeight);
+		view.style.height = (window.innerHeight*2)+"px";
+	}
+	adjast();
+	window.addEventListener("resize",adjast);
+
+	// ジャイロセンサーを読み取り反映する
+	var info1 = document.querySelector(".info1");
+	var info2 = document.querySelector(".info2");
+	var info3 = document.querySelector(".info3");
+	window.addEventListener("devicemotion",function(event) {
+		// ユーザーによる加速度 + 重力
+		var x = event.accelerationIncludingGravity.x; // 左右
+		var y = event.accelerationIncludingGravity.y; // 上下
+		var z = event.accelerationIncludingGravity.z; // 前後
+		var html = 'ユーザー加速度＋重力：　<br>x=' + x + "<br> y=" + y + "<br> z=" + z;
+		info1.innerHTML = html;
+
+		// ユーザーによる加速度
+		var x = event.acceleration.x; // 左右
+		var y = event.acceleration.y; // 上下
+		var z = event.acceleration.z; // 前後
+		var html = 'ユーザー加速度：　<br>x=' + x + "<br> y=" + y + "<br> z=" + z;
+		info2.innerHTML = html;
+
+		// 前回呼び出しからの経過時間
+		info3.innerHTML = '前回からの時間：　<br>' + event.interval;
+	});
+})();
+</script>
+</body>
+</html>
